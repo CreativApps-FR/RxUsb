@@ -17,7 +17,7 @@ import io.reactivex.rxjava3.subjects.PublishSubject
 
 /**
  * This class allows you to access the state of USB and communicate with USB accessories, in a reactive
- * way through RxJava capabilities.
+ * way through Rx capabilities.
  *
  * Created : 13/06/2020.
  * @author CreativApps - Damien P.
