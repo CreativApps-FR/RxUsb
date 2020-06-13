@@ -20,7 +20,7 @@ import io.reactivex.rxjava3.subjects.PublishSubject
  * way through RxJava capabilities.
  *
  * Created : 13/06/2020.
- * @author Creativapps - Damien P.
+ * @author CreativApps - Damien P.
  */
 interface RxUsbManager {
 
@@ -86,7 +86,7 @@ interface RxUsbManager {
      * [listenGrantedAccessoryEvents].
      * Emits [Completable.complete] when the question is asked.
      *
-     * If the accessory is not already granted, trigger and AlertDialog to ask permission.
+     * If the user has not already granted permission, trigger and AlertDialog to ask.
      */
     fun requestPermission(usbAccessory: UsbAccessory): Completable
 
@@ -96,7 +96,7 @@ interface RxUsbManager {
  * Actual implementation of [RxUsbManager] which is [LifecycleObserver] to start/stop listening
  * to context.
  */
-private class RxUsbManagerImpl(private val context: Context, private val lifecycle: Lifecycle) :
+private class RxUsbManagerImpl(private val context: Context, lifecycle: Lifecycle) :
     RxUsbManager, LifecycleObserver {
 
     // region PROPERTIES
