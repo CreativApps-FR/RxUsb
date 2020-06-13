@@ -25,6 +25,17 @@ abstract class RxUsbAccessory protected constructor(
     val accessoryName: String
 ) {
 
+    companion object {
+        fun create(
+            usbAccessory: UsbAccessory,
+            fileDescriptor: ParcelFileDescriptor,
+            bufferSize: Int,
+            name: String
+        ): RxUsbAccessory {
+            return RxUsbAccessoryImpl(usbAccessory, fileDescriptor, bufferSize, name)
+        }
+    }
+
     /**
      * Native [UsbAccessory] provided by Android to be used.
      */

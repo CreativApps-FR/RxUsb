@@ -90,6 +90,15 @@ interface RxUsbManager {
      */
     fun requestPermission(usbAccessory: UsbAccessory): Completable
 
+    /**
+     * Transform the given [UsbAccessory] into a ready to work [RxUsbAccessory] with
+     * a communication buffer already setup.
+     */
+    fun mapToRxAccessory(
+        usbAccessory: UsbAccessory,
+        communicationBufferSize: Int,
+        accessoryName: String
+    ): Single<RxUsbAccessory>
 }
 
 /**
@@ -221,17 +230,42 @@ private class RxUsbManagerImpl(private val context: Context, lifecycle: Lifecycl
     }
 
     override fun requestPermission(usbAccessory: UsbAccessory): Completable {
-        if (isPermissionRequestPending) {
-            return Completable.complete()
+        return if (isPermissionRequestPending) {
+            Completable.complete()
         } else {
             // Avoid terminated state if onError/Exception is triggered
             permissionPublisher = PublishSubject.create()
 
-            return Completable.create { emitter ->
+            Completable.create { emitter ->
                 usbManager.requestPermission(usbAccessory, permissionIntent)
                 isPermissionRequestPending = true
                 emitter.onComplete()
             }
+        }
+    }
+
+    override fun mapToRxAccessory(
+        usbAccessory: UsbAccessory,
+        communicationBufferSize: Int,
+        accessoryName: String
+    ): Single<RxUsbAccessory> {
+        try {
+            val parcelFileDescriptor = usbManager.openAccessory(usbAccessory)
+
+            return if (parcelFileDescriptor != null) {
+                val rxUsbAccessory = RxUsbAccessory.create(
+                    usbAccessory,
+                    parcelFileDescriptor,
+                    communicationBufferSize,
+                    accessoryName
+                )
+
+                Single.just(rxUsbAccessory)
+            } else {
+                Single.error(AccessoryNotOpenedException(usbAccessory))
+            }
+        } catch (e: Exception) {
+            return Single.error(e)
         }
     }
 
