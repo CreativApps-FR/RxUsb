@@ -131,6 +131,7 @@ private class RxUsbAccessoryImpl(
             val fileDescriptor = parcelFileDescriptor.fileDescriptor
             readStream = FileInputStream(fileDescriptor)
             writeStream = FileOutputStream(fileDescriptor)
+            readPublisher = PublishSubject.create()
 
             // Random thread name
             val threadName = accessoryName + UUID.randomUUID().toString().subSequence(0, 6)

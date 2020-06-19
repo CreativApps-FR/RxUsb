@@ -112,7 +112,7 @@ private class RxUsbManagerImpl(private val context: Context, lifecycle: Lifecycl
 
     private val attachedPublisher: PublishSubject<UsbAccessory> = PublishSubject.create()
     private val detachedPublisher: PublishSubject<UsbAccessory> = PublishSubject.create()
-    private lateinit var permissionPublisher: PublishSubject<UsbAccessory>
+    private var permissionPublisher: PublishSubject<UsbAccessory> = PublishSubject.create()
 
     private val usbManager: UsbManager = context.getSystemService(Context.USB_SERVICE) as UsbManager
 
