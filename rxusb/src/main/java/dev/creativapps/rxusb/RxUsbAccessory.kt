@@ -167,6 +167,7 @@ private class RxUsbAccessoryImpl(
         return Completable.create {
             try {
                 writeStream.write(command)
+                writeStream.flush()
                 it.onComplete()
             } catch (e: IOException) {
                 it.onError(e)
