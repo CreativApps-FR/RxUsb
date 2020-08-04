@@ -1,0 +1,44 @@
+apply plugin: 'com.jfrog.bintray'
+
+group 'dev.creativapps.libs'
+version '0.0.1'
+
+project.ext {
+    mavGitUrl = 'https://github.com/CreativApps-FR/RxUsb.git'
+    mavProjectName = 'RxUsb'
+    mavLibraryLicenses = ["MIT":'https://github.com/CreativApps-FR/RxUsb']
+    mavLibraryDescription = 'Android library built around AOA protocol wrapped with Rx'
+    mavPublishToMavenLocal = true
+    mavSiteUrl = 'https://github.com/CreativApps-FR/RxUsb'
+}
+
+def properties = new Properties()
+properties.load(new FileInputStream("local.properties"))
+
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+
+    pkg {
+        repo = 'maven'
+        name = 'RxUsb'
+        configurations = ['archives']
+        publications = ['mavenPublish']
+        override = true
+        desc = 'Android library built around AOA protocol wrapped with Rx'
+        websiteUrl = 'https://github.com/CreativApps-FR/RxUsb'
+        licenses = ["MIT"]
+        vcsUrl = 'https://github.com/CreativApps-FR/RxUsb.git'
+        publish = true
+        publicDownloadNumbers = true
+
+        version {
+            name = this.version
+            desc = "Version ${this.version}"
+            released = new Date()
+            vcsTag = this.version
+        }
+    }
+}
+
+apply from: 'https://raw.githubusercontent.com/sky-uk/gradle-maven-plugin/master/gradle-mavenizer.gradle'
